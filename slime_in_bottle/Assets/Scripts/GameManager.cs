@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject flont_UI, back_UI;
-    Color flont_c, back_c;
-    int UI_flag = 0;
-    [SerializeField] Sprite[] items;
-    [SerializeField] GameObject[] list;
-    const int item_num = 15;
+    Color flont_c, back_c; //アイテム画面と棚画面UIの背景色
+    int UI_flag = 0; //アイテム画面と棚画面切り替えのフラグ
+    [SerializeField] Sprite[] items; //アイテムと瓶のスプライト
+    [SerializeField] GameObject[] list; //アイテムと瓶のリスト
+    const int item_num = 15; //アイテム数
 
     void Start()
     {
@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// UIの切り替えを行う関数
+    /// </summary>
     public void Change_UI()
     {
         flont_c = flont_UI.GetComponent<Image>().color;
