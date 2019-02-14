@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     Color flont_c, back_c;
     int UI_flag = 0;
     [SerializeField] Sprite[] items;
+    [SerializeField] GameObject[] list;
+    const int item_num = 15;
 
     void Start()
     {
@@ -30,15 +32,18 @@ public class GameManager : MonoBehaviour
 
         UI_flag = 1 - UI_flag;
 
-        if(UI_flag == 0)
+        if (UI_flag == 0)
         {
-
+            for (int i = 0; i <= item_num - 1; i++)
+            {
+                list[i].GetComponent<Image>().sprite = items[i];
+            }
         }
         else
         {
-            for(int i = 0; i <= 9; i++)
+            for (int i = 0; i <= item_num - 1; i++)
             {
-
+                list[i].GetComponent<Image>().sprite = items[item_num];
             }
         }
     }
