@@ -38,14 +38,17 @@ public class GameManager : MonoBehaviour
             itemData.Add(line.Split(','));
         }
 
-        for(int i = 0; i <= 359; i++)
-        {
-            string imageName = itemData[i][1];
-            MatchCollection match = Regex.Matches(imageName, "^[a-z].*");
+        int j = 0;
 
-            foreach(Match m in match)
+        for (int i = 0; i <= 359; i++)
+        {
+            string[] fileName = new string[360];
+            fileName[i] = itemData[i][1].Replace(".png", "");
+
+            if (File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
             {
-                Debug.Log(m.Value);
+                list[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + fileName[i]);
+                j++;
             }
         }
     }
@@ -65,9 +68,18 @@ public class GameManager : MonoBehaviour
 
         if (UI_flag == 0)
         {
-            for (int i = 0; i <= item_num - 1; i++)
+            int j = 0;
+
+            for (int i = 0; i <= 359; i++)
             {
-                list[i].GetComponent<Image>().sprite = items[i];
+                string[] fileName = new string[360];
+                fileName[i] = itemData[i][1].Replace(".png", "");
+
+                if (File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
+                {
+                    list[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + fileName[i]);
+                    j++;
+                }
             }
         }
         else
