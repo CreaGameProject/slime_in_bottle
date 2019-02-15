@@ -12,11 +12,64 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject[] list; //アイテムと瓶のリスト
     int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
     const int item_num = 15; //アイテム数
-    List<string[]> itemData = new List<string[]>();
+    List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
+
+    int status; //信頼↔嫌悪の基本となる感情
+    int likePoint; //スライムの好みによって変動する変数
+
+    public int Status
+    {
+        get
+        {
+            return status;
+        }
+
+        set
+        {
+            if (value > 100)
+            {
+                status = 100;
+            }
+            else if (value < -100)
+            {
+                status = 100;
+            }
+            else
+            {
+                status = value;
+            }
+        }
+    }
+
+    public int LikePoint
+    {
+        get
+        {
+            return likePoint;
+        }
+
+        set
+        {
+            if (value > 100)
+            {
+                likePoint = 100;
+            }
+            else if (value < -100)
+            {
+                likePoint = 100;
+            }
+            else
+            {
+                likePoint = value;
+            }
+        }
+    }
 
     void Start()
     {
         ReadFile();
+        Status = 0;
+        LikePoint = 0;
     }
 
     void Update()
@@ -25,7 +78,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// CSVファイルを読み込む関数
+    /// CSVファイルからアイテム画像を読み込む関数
     /// </summary>
     void ReadFile()
     {
