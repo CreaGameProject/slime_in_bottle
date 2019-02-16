@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     int status; //信頼↔嫌悪の基本となる感情
     int likePoint; //スライムの好みによって変動する変数
 
+    SlimeStatus slimeStatus = new SlimeStatus();
+
     public int Status
     {
         get
@@ -143,4 +145,32 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+}
+
+/// <summary>
+/// スライムの個体値管理クラス
+/// </summary>
+public class SlimeStatus
+{
+    public int red;
+    public int blue;
+    public int yellow;
+    public int green;
+    public int purple;
+    public int white;
+    public int black;
+    public int bright;
+    public int foods;
+    public int fruits;
+    public int sweets;
+    public int toys;
+    public int hot;
+    public int cool;
+    public int hard;
+    public int soft;
+    public int curiosity;
+    public int fancy;
+    public int sober;
+    public int round;
+    public int anglar;
 }
