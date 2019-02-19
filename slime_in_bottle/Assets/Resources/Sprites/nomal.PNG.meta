@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 34ba8e5fa3b627749904f97f02cbb106
+guid: abc3b623414221e45bb8bcb9be8bab52
 TextureImporter:
   fileIDToRecycleName: {}
   externalObjects: {}
@@ -50,7 +50,7 @@ TextureImporter:
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
-  spriteTessellationDetail: -1
+  spriteTessellationDetail: 0
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
@@ -72,10 +72,74 @@ TextureImporter:
   spriteSheet:
     serializedVersion: 2
     sprites: []
-    outline: []
+    outline:
+    - - {x: 217, y: -222}
+      - {x: 190, y: -228}
+      - {x: 164, y: -230}
+      - {x: 136, y: -232}
+      - {x: 107, y: -234}
+      - {x: 76, y: -234}
+      - {x: 46, y: -234}
+      - {x: 17, y: -233}
+      - {x: -11, y: -233}
+      - {x: -43, y: -233}
+      - {x: -76, y: -231}
+      - {x: -102, y: -231}
+      - {x: -137, y: -229}
+      - {x: -161, y: -227}
+      - {x: -190, y: -222}
+      - {x: -210, y: -218}
+      - {x: -227, y: -210}
+      - {x: -244, y: -198}
+      - {x: -255, y: -185}
+      - {x: -265, y: -164}
+      - {x: -271, y: -144}
+      - {x: -275, y: -120}
+      - {x: -277, y: -98}
+      - {x: -275, y: -74}
+      - {x: -273, y: -50}
+      - {x: -271, y: -30}
+      - {x: -266, y: -12}
+      - {x: -260, y: 7}
+      - {x: -251, y: 25}
+      - {x: -240, y: 43}
+      - {x: -228, y: 60}
+      - {x: -215, y: 78}
+      - {x: -201, y: 96}
+      - {x: -183, y: 115}
+      - {x: -159, y: 136}
+      - {x: -134, y: 153}
+      - {x: -103, y: 169}
+      - {x: -75, y: 181}
+      - {x: -55, y: 187}
+      - {x: -34, y: 190}
+      - {x: -3, y: 192}
+      - {x: 29, y: 189}
+      - {x: 62, y: 184}
+      - {x: 91, y: 177}
+      - {x: 124, y: 166}
+      - {x: 153, y: 151}
+      - {x: 178, y: 134}
+      - {x: 198, y: 118}
+      - {x: 219, y: 95}
+      - {x: 232, y: 75}
+      - {x: 243, y: 56}
+      - {x: 253, y: 32}
+      - {x: 260, y: 14}
+      - {x: 267, y: -5}
+      - {x: 273, y: -27}
+      - {x: 278, y: -48}
+      - {x: 283, y: -71}
+      - {x: 287, y: -97}
+      - {x: 289, y: -115}
+      - {x: 288, y: -137}
+      - {x: 282, y: -159}
+      - {x: 271, y: -182}
+      - {x: 254, y: -202}
+      - {x: 238, y: -214}
     physicsShape: []
     bones: []
-    spriteID: 47dec515667620142985207faaef8361
+    spriteID: a0d7677814ab44943adefe681bc0dc1e
     vertices: []
     indices: 
     edges: []
