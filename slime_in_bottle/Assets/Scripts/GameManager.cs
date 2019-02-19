@@ -17,8 +17,6 @@ public class GameManager : MonoBehaviour
     int status; //信頼↔嫌悪の基本となる感情
     int likePoint; //スライムの好みによって変動する変数
 
-    SlimeStatus slimeStatus = new SlimeStatus();
-
     public int Status
     {
         get
@@ -34,7 +32,7 @@ public class GameManager : MonoBehaviour
             }
             else if (value < -100)
             {
-                status = 100;
+                status = -100;
             }
             else
             {
@@ -52,13 +50,13 @@ public class GameManager : MonoBehaviour
 
         set
         {
-            if (value > 100)
+            if (value > 10)
             {
-                likePoint = 100;
+                likePoint = 10;
             }
-            else if (value < -100)
+            else if (value < -10)
             {
-                likePoint = 100;
+                likePoint = -10;
             }
             else
             {
@@ -97,12 +95,9 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i <= 359; i++)
         {
-            string[] fileName = new string[360];
-            fileName[i] = itemData[i][1].Replace(".png", "");
-
-            if (File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
+            if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
             {
-                list[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + fileName[i]);
+                list[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
                 j++;
             }
         }
