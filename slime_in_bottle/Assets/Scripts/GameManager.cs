@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject flont_UI, back_UI;
-    [SerializeField] GameObject list; //アイテムと瓶のリスト
+    [SerializeField] GameObject item;
+    [SerializeField] GameObject parent;
+    [SerializeField] GameObject child;
     int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
     const int item_num = 15; //アイテム数
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
@@ -96,7 +98,8 @@ public class GameManager : MonoBehaviour
         {
             if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
             {
-                list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
+                Transform clone = Instantiate(item, parent.transform).transform;
+                Instantiate(child, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
                 j++;
             }
         }
@@ -123,10 +126,9 @@ public class GameManager : MonoBehaviour
             {
                 string fileName = itemData[i][1].Replace(".png", "");
 
-                if (File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
+                if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
                 {
-
-                    list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + fileName);
+                    //list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
                     j++;
                 }
             }
@@ -135,7 +137,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i <= item_num - 1; i++)
             {
-                list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
+               // list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
             }
         }
     }
