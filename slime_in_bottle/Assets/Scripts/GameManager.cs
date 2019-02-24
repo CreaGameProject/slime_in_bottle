@@ -8,8 +8,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject flont_UI, back_UI;
-    [SerializeField] Sprite[] items; //アイテムと瓶のスプライト
-    [SerializeField] GameObject[] list; //アイテムと瓶のリスト
+    [SerializeField] GameObject list; //アイテムと瓶のリスト
     int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
     const int item_num = 15; //アイテム数
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
@@ -97,7 +96,7 @@ public class GameManager : MonoBehaviour
         {
             if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
             {
-                list[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
+                list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
                 j++;
             }
         }
@@ -122,12 +121,12 @@ public class GameManager : MonoBehaviour
 
             for (int i = 0; i <= 359; i++)
             {
-                string[] fileName = new string[360];
-                fileName[i] = itemData[i][1].Replace(".png", "");
+                string fileName = itemData[i][1].Replace(".png", "");
 
                 if (File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
                 {
-                    list[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + fileName[i]);
+
+                    list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + fileName);
                     j++;
                 }
             }
@@ -136,7 +135,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i <= item_num - 1; i++)
             {
-                list[i].GetComponent<Image>().sprite = items[item_num];
+                list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
             }
         }
     }
