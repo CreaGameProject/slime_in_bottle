@@ -9,6 +9,7 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     Vector2 prevPos, dragPos, endPos;
     [SerializeField] GameObject image;
+    [SerializeField] GameObject slimePos;
 
     void Start()
     {
@@ -35,5 +36,9 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         endPos = transform.position;
         image.transform.position = prevPos;
+        if(Vector2.Distance(endPos, slimePos.transform.position) > 1200)
+        {
+            Debug.Log("ate!");
+        }
     }
 }
