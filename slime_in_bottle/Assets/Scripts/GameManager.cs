@@ -15,68 +15,30 @@ public class GameManager : MonoBehaviour
     int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
     const int item_num = 15; //セーブデータ数
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
-
-    int status; //信頼↔嫌悪の基本となる感情
-    int likePoint; //スライムの好みによって変動する変数
-
-    public int Status
-    {
-        get
-        {
-            return status;
-        }
-
-        set
-        {
-            if (value > 100)
-            {
-                status = 100;
-            }
-            else if (value < -100)
-            {
-                status = -100;
-            }
-            else
-            {
-                status = value;
-            }
-        }
-    }
-
-    public int LikePoint
-    {
-        get
-        {
-            return likePoint;
-        }
-
-        set
-        {
-            if (value > 10)
-            {
-                likePoint = 10;
-            }
-            else if (value < -10)
-            {
-                likePoint = -10;
-            }
-            else
-            {
-                likePoint = value;
-            }
-        }
-    }
+    SlimeStatus slime = new SlimeStatus();
 
     void Start()
     {
         ReadFile();
-        Status = 0;
-        LikePoint = 0;
+
+        slime.Status = 0;
+        slime.LikePoint = 0;
+
+        SlimeStatus();
     }
 
     void Update()
     {
 
+    }
+
+    void SlimeStatus()
+    {
+        for(int i = 0; i < slime.attribute_num; i++)
+        {
+            slime.attribute[i] = Random.Range(-10f, 10f);
+            //Debug.Log(i + ":" + slime.attribute[i]);
+        }
     }
 
     /// <summary>
@@ -92,8 +54,6 @@ public class GameManager : MonoBehaviour
             string line = reader.ReadLine();
             itemData.Add(line.Split(','));
         }
-
-        int j = 0;
 
         for (int i = 0; i <= 359; i++)
         {
@@ -142,27 +102,59 @@ public class GameManager : MonoBehaviour
 /// <summary>
 /// スライムの個体値管理クラス
 /// </summary>
+//[System.Serializable]
 public class SlimeStatus
 {
-    public int red;
-    public int blue;
-    public int yellow;
-    public int green;
-    public int purple;
-    public int white;
-    public int black;
-    public int bright;
-    public int foods;
-    public int fruits;
-    public int sweets;
-    public int toys;
-    public int hot;
-    public int cool;
-    public int hard;
-    public int soft;
-    public int curiosity;
-    public int fancy;
-    public int sober;
-    public int round;
-    public int anglar;
+    [System.NonSerialized] public float status, likePoint;  //信頼↔嫌悪の基本となる感情 スライムの好みによって変動する変数
+    [System.NonSerialized] public int attribute_num = 23;
+    [System.NonSerialized]
+    public float[] attribute = new float[23];
+    //public float red, blue, yellow, green, purple, white, black, bright, foods, fruits,
+    //           sweets, toys, hot, cool, hard, soft, curiosity, fancy, sober, round, anglar;
+    public float LikePoint
+    {
+        get
+        {
+            return likePoint;
+        }
+
+        set
+        {
+            if (value > 10)
+            {
+                likePoint = 10;
+            }
+            else if (value < -10)
+            {
+                likePoint = -10;
+            }
+            else
+            {
+                likePoint = value;
+            }
+        }
+    }
+    public float Status
+    {
+        get
+        {
+            return status;
+        }
+
+        set
+        {
+            if (value > 100)
+            {
+                status = 100;
+            }
+            else if (value < -100)
+            {
+                status = -100;
+            }
+            else
+            {
+                status = value;
+            }
+        }
+    }
 }

@@ -858,6 +858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 0}
+  slimePos: {fileID: 0}
 --- !u!1 &1312571330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1411,7 +1412,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2010838975}
   m_HandleRect: {fileID: 339208647}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

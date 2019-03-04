@@ -41,6 +41,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1374799714687420}
+  slimePos: {fileID: 0}
 --- !u!114 &114929561716980676
 MonoBehaviour:
   m_ObjectHideFlags: 1

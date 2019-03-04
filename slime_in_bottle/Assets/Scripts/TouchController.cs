@@ -6,10 +6,10 @@ using UnityEngine.EventSystems;
 
 public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-
     Vector2 prevPos, dragPos, endPos;
     [SerializeField] GameObject image;
     [SerializeField] GameObject slimePos;
+    int UI_flag = 0;
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-;       dragPos = eventData.position;
+        dragPos = eventData.position;
         image.transform.position = eventData.position;
     }
 
@@ -36,7 +36,7 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         endPos = transform.position;
         image.transform.position = prevPos;
-        if(Vector2.Distance(endPos, slimePos.transform.position) > 1200)
+        if (Vector2.Distance(endPos, slimePos.transform.position) > 1200)
         {
             Debug.Log("ate!");
         }
