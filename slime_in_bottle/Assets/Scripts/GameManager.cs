@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         ReadFile();
 
         slime.Status = 0;
-        slime.likePoint = 0;
+        slime.LikePoint = 0;
 
         SlimeStatus();
     }
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         TextAsset itemList = Resources.Load("itemList") as TextAsset;
         StringReader reader = new StringReader(itemList.text);
-        List<GameObject> items = new List<GameObject>();
+        //List<GameObject> items = new List<GameObject>();
 
         while (reader.Peek() != -1)
         {
@@ -57,14 +57,14 @@ public class GameManager : MonoBehaviour
             itemData.Add(line.Split(','));
         }
 
-        for (int i = 0; i <= 359; i++)
+        for (int i = 0; i < 271; i++)
         {
             if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]))
             {
                 GameObject clone = Instantiate(item, parent.transform);
                 GameObject e = Instantiate(child, clone.transform);
                 e.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
-                items.Add(e);
+                //items.Add(e);
                 EventTrigger eventTrigger = e.AddComponent<EventTrigger>();
                 EventTrigger.Entry entry = new EventTrigger.Entry();
                 entry.eventID = EventTriggerType.EndDrag;
@@ -112,40 +112,26 @@ public class GameManager : MonoBehaviour
 
     public void OnEndDrag(string itemName)
     {
-        switch (itemName)
+        for (int i = 0; i < 271; i++)
         {
-            case "balloon1":
-                for (int i = 13; i <= 36; i++)
+            if (itemName == itemData[i][1].Replace(".png", ""))
+            {
+                for (int j = 12; j < 36; j++)
                 {
-                    if (itemData[3][i] == "〇")
+                    if (itemData[i][j] == "〇")
                     {
-                        if (slime.attribute[i - 13] > 0)
+                        Debug.Log(i + ":" + j);
+                        if (slime.attribute[j - 12] > 0)
                         {
                             slime.Status += Random.Range(50, 80);
                         }
-                        else if(slime.attribute[i - 13] < 0)
+                        else if (slime.attribute[j - 12] < 0)
                         {
                             slime.Status -= Random.Range(50, 80);
                         }
                     }
                 }
-                break;
-            case "balloon3":
-                for (int i = 13; i <= 36; i++)
-                {
-                    if (itemData[5][i] == "〇")
-                    {
-                        if (slime.attribute[i - 13] > 0)
-                        {
-                            slime.Status += Random.Range(50, 80);
-                        }
-                        else if (slime.attribute[i - 13] < 0)
-                        {
-                            slime.Status -= Random.Range(50, 80);
-                        }
-                    }
-                }
-                break;
+            }
         }
     }
 }
@@ -156,7 +142,7 @@ public class GameManager : MonoBehaviour
 //[System.Serializable]
 public class SlimeStatus
 {
-    [System.NonSerialized] public float likePoint;  //信頼↔嫌悪の基本となる感情 スライムの好みによって変動する変数
+    [System.NonSerialized] private float likePoint;  //信頼↔嫌悪の基本となる感情 スライムの好みによって変動する変数
     [System.NonSerialized] public int attribute_num = 23;
     [System.NonSerialized]
     public float[] attribute = new float[23];
@@ -176,13 +162,37 @@ public class SlimeStatus
             {
                 status = 100;
             }
-            else if(value < -100)
+            else if (value < -100)
             {
                 status = -100;
             }
             else
             {
                 status = value;
+            }
+        }
+    }
+
+    public float LikePoint
+    {
+        get
+        {
+            return likePoint;
+        }
+
+        set
+        {
+            if (value > 10)
+            {
+                likePoint = 10;
+            }
+            else if (value < -10)
+            {
+                likePoint = -10;
+            }
+            else
+            {
+                likePoint = value;
             }
         }
     }
