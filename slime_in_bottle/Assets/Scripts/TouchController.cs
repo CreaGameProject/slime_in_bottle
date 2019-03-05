@@ -9,7 +9,6 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     Vector2 prevPos, dragPos, endPos;
     [SerializeField] GameObject image;
     [SerializeField] GameObject slimePos;
-    int UI_flag = 0;
 
     void Start()
     {

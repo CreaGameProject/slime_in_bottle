@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     void SlimeStatus()
     {
-        for(int i = 0; i < slime.attribute_num; i++)
+        for (int i = 0; i < slime.attribute_num; i++)
         {
             slime.attribute[i] = Random.Range(-10f, 10f);
             //Debug.Log(i + ":" + slime.attribute[i]);
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
     {
         TextAsset itemList = Resources.Load("itemList") as TextAsset;
         StringReader reader = new StringReader(itemList.text);
+        List<GameObject> items = new List<GameObject>();
 
         while (reader.Peek() != -1)
         {
@@ -59,10 +61,21 @@ public class GameManager : MonoBehaviour
         {
             if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]))
             {
-                Transform clone = Instantiate(item, parent.transform).transform;
-                Instantiate(child, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
+                GameObject clone = Instantiate(item, parent.transform);
+                GameObject e = Instantiate(child, clone.transform);
+                e.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
+                items.Add(e);
+                EventTrigger eventTrigger = e.AddComponent<EventTrigger>();
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.EndDrag;
+                int j = i + 0;
+                entry.callback.AddListener((x) => OnEndDrag(itemData[j][1].Replace(".png", "")));
+                Debug.Log(itemData[i][1]);
+                eventTrigger.triggers.Add(entry);
             }
         }
+
+
 
         for (int i = 0; i <= item_num - 1; i++)
         {
@@ -95,6 +108,16 @@ public class GameManager : MonoBehaviour
         {
             parent.SetActive(false);
             bottle.SetActive(true);
+        }
+    }
+
+    public void OnEndDrag(string itemName)
+    {
+        switch(itemName)
+        {
+            case "balloon1":
+                Debug.Log(itemName);
+                break;
         }
     }
 }
