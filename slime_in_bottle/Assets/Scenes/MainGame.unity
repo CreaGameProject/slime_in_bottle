@@ -1261,7 +1261,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2010838975}
   m_HandleRect: {fileID: 339208647}
-  m_Direction: 2
+  m_Direction: 3
   m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
