@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Change_face(float status, float likepoint)
     {
-        if (likepoint > 5 && status > 50)
+        if (likepoint > 7 && status > 50)
         {
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY_B.ToString());
         }
@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
         {
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY.ToString());
         }
-        else if (likepoint < -5 && status < -50)
+        else if (likepoint < -7 && status < -50)
         {
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.ANGRY.ToString());
         }
@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.SAD.ToString());
         }
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2.5f);
         slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
     }
 }
