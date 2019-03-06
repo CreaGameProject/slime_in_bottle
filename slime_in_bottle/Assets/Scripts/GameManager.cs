@@ -5,6 +5,12 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.U2D;
+
+enum Emotion
+{
+    NOMAL, HAPPY, SAD, ANGRY, HAPPY_B, SURPRISE, TIRED, HOPE, FEAR
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject bottle;
     [SerializeField] GameObject item;
     [SerializeField] GameObject child;
+    [SerializeField] Image slime_image;
+
     int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
     const int item_num = 15; //セーブデータ数
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
@@ -30,7 +38,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(slime.Status);
+
     }
 
     void SlimeStatus()
@@ -38,7 +46,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < slime.attribute_num; i++)
         {
             slime.attribute[i] = Random.Range(-10f, 10f);
-            Debug.Log(i + ":" + slime.attribute[i]);
+            //Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
         }
     }
 
@@ -69,7 +77,7 @@ public class GameManager : MonoBehaviour
                 EventTrigger.Entry entry = new EventTrigger.Entry();
                 entry.eventID = EventTriggerType.EndDrag;
                 int j = i + 0;
-                entry.callback.AddListener((x) => OnEndDrag(itemData[j][1].Replace(".png", "")));
+                entry.callback.AddListener((x) => Give_item(itemData[j][1].Replace(".png", "")));
                 eventTrigger.triggers.Add(entry);
             }
         }
@@ -110,7 +118,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnEndDrag(string itemName)
+    public void Give_item(string itemName)
     {
         for (int i = 0; i < 271; i++)
         {
@@ -120,19 +128,108 @@ public class GameManager : MonoBehaviour
                 {
                     if (itemData[i][j] == "〇")
                     {
-                        Debug.Log(i + ":" + j);
+                        Debug.Log(itemData[1][j]);
                         if (slime.attribute[j - 12] > 0)
                         {
-                            slime.Status += Random.Range(50, 80);
+                            if (slime.attribute[j - 12] == 10)
+                            {
+                                slime.Status = 100;
+                                slime.LikePoint = 10;
+                            }
+                            else if (slime.attribute[j - 12] > 8)
+                            {
+                                slime.Status += Random.Range(80, 90);
+                                slime.LikePoint += Random.Range(8, 9);
+                            }
+                            else if (slime.attribute[j - 12] > 6)
+                            {
+                                slime.Status += Random.Range(60, 80);
+                                slime.LikePoint += Random.Range(6, 8);
+
+                            }
+                            else if (slime.attribute[j - 12] > 4)
+                            {
+                                slime.Status += Random.Range(40, 60);
+                                slime.LikePoint += Random.Range(4, 6);
+                            }
+                            else if (slime.attribute[j - 12] > 2)
+                            {
+                                slime.Status += Random.Range(20, 40);
+                                slime.LikePoint += Random.Range(2, 4);
+                            }
+                            else
+                            {
+                                slime.Status += Random.Range(0, 20);
+                                slime.LikePoint += Random.Range(0, 2);
+                            }
                         }
                         else if (slime.attribute[j - 12] < 0)
                         {
-                            slime.Status -= Random.Range(50, 80);
+                            if (slime.attribute[j - 12] == -10)
+                            {
+                                slime.Status = -100;
+                                slime.LikePoint = -10;
+                            }
+                            else if (slime.attribute[j - 12] < -8)
+                            {
+                                slime.Status -= Random.Range(80, 90);
+                                slime.LikePoint -= Random.Range(8, 9);
+                            }
+                            else if (slime.attribute[j - 12] < -6)
+                            {
+                                slime.Status -= Random.Range(60, 80);
+                                slime.LikePoint -= Random.Range(6, 8);
+                            }
+                            else if (slime.attribute[j - 12] < -4)
+                            {
+                                slime.Status -= Random.Range(40, 60);
+                                slime.LikePoint -= Random.Range(4, 6);
+                            }
+                            else if (slime.attribute[j - 12] < -2)
+                            {
+                                slime.Status -= Random.Range(20, 40);
+                                slime.LikePoint -= Random.Range(2, 4);
+                            }
+                            else
+                            {
+                                slime.Status -= Random.Range(0, 20);
+                                slime.LikePoint -= 1;
+                            }
+                        }
+                        else
+                        {
+                            slime.Status += 0;
                         }
                     }
                 }
             }
         }
+        Debug.Log(slime.Status + ":" + slime.LikePoint);
+
+        StartCoroutine(Change_face(slime.Status, slime.LikePoint));
+    }
+
+    IEnumerator Change_face(float status, float likepoint)
+    {
+        if (likepoint > 5 && status > 50)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY_B.ToString());
+        }
+        else if (likepoint > 5)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY.ToString());
+        }
+        else if (likepoint < -5 && status < -50)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.ANGRY.ToString());
+        }
+        else if (likepoint < -5)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.SAD.ToString());
+        }
+
+        yield return new WaitForSeconds(5);
+        slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
     }
 }
 

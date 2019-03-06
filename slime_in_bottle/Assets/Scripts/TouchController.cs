@@ -37,7 +37,7 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         image.transform.position = prevPos;
         if (Vector2.Distance(endPos, slimePos.transform.position) > 1200)
         {
-            Debug.Log("ate!");
+            //Debug.Log("ate!");
         }
     }
 }
