@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
     const int item_num = 15; //セーブデータ数
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
-    SlimeStatus slime = new SlimeStatus();
+    SlimeStatus slime = new SlimeStatus(); //インスタンス作成
 
     void Start()
     {
@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// スライムのステータスを決定する関数
+    /// </summary>
     void SlimeStatus()
     {
         for (int i = 0; i < slime.attribute_num; i++)
@@ -51,7 +54,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// CSVファイルからアイテム画像を読み込む関数
+    /// CSVファイルからアイテム画像を読み込み、アイテムリストをインスタンシエイトする関数
     /// </summary>
     void ReadFile()
     {
@@ -70,19 +73,16 @@ public class GameManager : MonoBehaviour
             if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]))
             {
                 GameObject clone = Instantiate(item, parent.transform);
-                GameObject e = Instantiate(child, clone.transform);
-                e.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
-                //items.Add(e);
-                EventTrigger eventTrigger = e.AddComponent<EventTrigger>();
+                GameObject image = Instantiate(child, clone.transform);
+                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
+                EventTrigger eventTrigger = image.AddComponent<EventTrigger>();
                 EventTrigger.Entry entry = new EventTrigger.Entry();
                 entry.eventID = EventTriggerType.EndDrag;
-                int j = i + 0;
+                int j = i;
                 entry.callback.AddListener((x) => Give_item(itemData[j][1].Replace(".png", "")));
                 eventTrigger.triggers.Add(entry);
             }
         }
-
-
 
         for (int i = 0; i <= item_num - 1; i++)
         {
@@ -118,41 +118,45 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// アイテムを与えたときのスライムの値の変動を行う関数
+    /// </summary>
+    /// <param name="itemName">アイテムの名前</param>
     public void Give_item(string itemName)
     {
         for (int i = 0; i < 271; i++)
         {
             if (itemName == itemData[i][1].Replace(".png", ""))
             {
-                for (int j = 12; j < 36; j++)
+                for (int j = 13; j < 36; j++)
                 {
                     if (itemData[i][j] == "〇")
                     {
-                        Debug.Log(itemData[1][j]);
-                        if (slime.attribute[j - 12] > 0)
+                        // Debug.Log(itemData[1][j]);
+                        if (slime.attribute[j - 13] > 0)
                         {
-                            if (slime.attribute[j - 12] == 10)
+                            if (slime.attribute[j - 13] == 10)
                             {
                                 slime.Status = 100;
                                 slime.LikePoint = 10;
                             }
-                            else if (slime.attribute[j - 12] > 8)
+                            else if (slime.attribute[j - 13] > 8)
                             {
                                 slime.Status += Random.Range(80, 90);
                                 slime.LikePoint += Random.Range(8, 9);
                             }
-                            else if (slime.attribute[j - 12] > 6)
+                            else if (slime.attribute[j - 13] > 6)
                             {
                                 slime.Status += Random.Range(60, 80);
                                 slime.LikePoint += Random.Range(6, 8);
 
                             }
-                            else if (slime.attribute[j - 12] > 4)
+                            else if (slime.attribute[j - 13] > 4)
                             {
                                 slime.Status += Random.Range(40, 60);
                                 slime.LikePoint += Random.Range(4, 6);
                             }
-                            else if (slime.attribute[j - 12] > 2)
+                            else if (slime.attribute[j - 13] > 2)
                             {
                                 slime.Status += Random.Range(20, 40);
                                 slime.LikePoint += Random.Range(2, 4);
@@ -163,29 +167,29 @@ public class GameManager : MonoBehaviour
                                 slime.LikePoint += Random.Range(0, 2);
                             }
                         }
-                        else if (slime.attribute[j - 12] < 0)
+                        else if (slime.attribute[j - 13] < 0)
                         {
-                            if (slime.attribute[j - 12] == -10)
+                            if (slime.attribute[j - 13] == -10)
                             {
                                 slime.Status = -100;
                                 slime.LikePoint = -10;
                             }
-                            else if (slime.attribute[j - 12] < -8)
+                            else if (slime.attribute[j - 13] < -8)
                             {
                                 slime.Status -= Random.Range(80, 90);
                                 slime.LikePoint -= Random.Range(8, 9);
                             }
-                            else if (slime.attribute[j - 12] < -6)
+                            else if (slime.attribute[j - 13] < -6)
                             {
                                 slime.Status -= Random.Range(60, 80);
                                 slime.LikePoint -= Random.Range(6, 8);
                             }
-                            else if (slime.attribute[j - 12] < -4)
+                            else if (slime.attribute[j - 13] < -4)
                             {
                                 slime.Status -= Random.Range(40, 60);
                                 slime.LikePoint -= Random.Range(4, 6);
                             }
-                            else if (slime.attribute[j - 12] < -2)
+                            else if (slime.attribute[j - 13] < -2)
                             {
                                 slime.Status -= Random.Range(20, 40);
                                 slime.LikePoint -= Random.Range(2, 4);
@@ -209,8 +213,16 @@ public class GameManager : MonoBehaviour
         StartCoroutine(Change_face(slime.Status, slime.LikePoint));
     }
 
+    /// <summary>
+    /// スライムの表情を変える関数
+    /// </summary>
+    /// <param name="status">信頼↔嫌悪の基本となる変数</param>
+    /// <param name="likepoint">スライムの好みによって変動する変数</param>
+    /// <returns></returns>
     IEnumerator Change_face(float status, float likepoint)
     {
+        slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
+
         if (likepoint > 7 && status > 50)
         {
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY_B.ToString());
@@ -228,7 +240,7 @@ public class GameManager : MonoBehaviour
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.SAD.ToString());
         }
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2);
         slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
     }
 }
