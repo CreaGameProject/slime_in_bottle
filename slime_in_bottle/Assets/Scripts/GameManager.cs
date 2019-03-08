@@ -9,7 +9,7 @@ using UnityEngine.U2D;
 
 enum Emotion
 {
-    NOMAL, HAPPY, SAD, ANGRY, HAPPY_B, SURPRISE, TIRED, HOPE, FEAR
+    DISLIKE, NOMAL, TRUST, HAPPY, SAD, ANGRY, HAPPY_B, SURPRISE, TIRED, HOPE, FEAR
 }
 
 public class GameManager : MonoBehaviour
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
         {
             if (itemName == itemData[i][1].Replace(".png", ""))
             {
-                for (int j = 13; j < 36; j++)
+                for (int j = 13; j <= 35; j++)
                 {
                     if (itemData[i][j] == "〇")
                     {
@@ -204,6 +204,45 @@ public class GameManager : MonoBehaviour
                         {
                             slime.Status += 0;
                         }
+
+                        for (int n = 13; n <= 19; n++)
+                        {
+                            if (j == n)
+                            {
+                                if (itemData[i][4] != "")
+                                {
+                                    int r = int.Parse(itemData[i][4]);
+                                    int g = int.Parse(itemData[i][5]);
+                                    int b = int.Parse(itemData[i][6]);
+
+                                    int rand = Random.Range(0, 10);
+
+                                    if (rand > 8)
+                                    {
+                                        Change_color(r, g, b);
+                                        //Debug.Log(r + ":" + g + ":" + b);
+                                    }
+                                }
+                                else if (itemData[i][7] != "")
+                                {
+                                    int r = int.Parse(itemData[i][7]);
+                                    int g = int.Parse(itemData[i][8]);
+                                    int b = int.Parse(itemData[i][9]);
+
+                                    int rand = Random.Range(0, 10);
+
+                                    if (rand > 8)
+                                    {
+                                        Change_color(r, g, b);
+                                        //Debug.Log(r + ":" + g + ":" + b);
+                                    }
+                                }
+                                else
+                                {
+                                    Change_color(255, 255, 255);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -242,6 +281,12 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(2);
         slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
+
+    }
+
+    void Change_color(int r, int g, int b)
+    {
+        slime_image.color = new Color(r, g, b);
     }
 }
 
