@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < slime.attribute_num; i++)
         {
             slime.attribute[i] = Random.Range(-10f, 10f);
-            //Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
+            Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
         }
     }
 
