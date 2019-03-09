@@ -12,6 +12,11 @@ enum Emotion
     DISLIKE, NOMAL, TRUST, HAPPY, SAD, ANGRY, HAPPY_B, SURPRISE, TIRED, HOPE, FEAR
 }
 
+enum Form
+{
+    NOMAL, CUBE, SHARPLY, LIQUID, LIMP, ANGLAR
+}
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject flont_UI, back_UI;
@@ -48,7 +53,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < slime.attribute_num; i++)
         {
-            slime.attribute[i] = Random.Range(-10f, 10f);
+            slime.attribute[i] = Random.Range(-10, 10);
             Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
         }
     }
@@ -70,11 +75,11 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 271; i++)
         {
-            if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]))
+            if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/Items/" + itemData[i][1]))
             {
                 GameObject clone = Instantiate(item, parent.transform);
                 GameObject image = Instantiate(child, clone.transform);
-                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
+                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Items/" + itemData[i][1].Replace(".png", ""));
                 EventTrigger eventTrigger = image.AddComponent<EventTrigger>();
                 EventTrigger.Entry entry = new EventTrigger.Entry();
                 entry.eventID = EventTriggerType.EndDrag;
@@ -137,13 +142,13 @@ public class GameManager : MonoBehaviour
                         {
                             if (slime.attribute[j - 13] == 10)
                             {
-                                slime.Status = 100;
-                                slime.LikePoint = 10;
+                                slime.Status += 100;
+                                slime.LikePoint += 10;
                             }
                             else if (slime.attribute[j - 13] > 8)
                             {
-                                slime.Status += Random.Range(80, 90);
-                                slime.LikePoint += Random.Range(8, 9);
+                                slime.Status += Random.Range(80, 100);
+                                slime.LikePoint += Random.Range(8, 10);
                             }
                             else if (slime.attribute[j - 13] > 6)
                             {
@@ -171,33 +176,33 @@ public class GameManager : MonoBehaviour
                         {
                             if (slime.attribute[j - 13] == -10)
                             {
-                                slime.Status = -100;
-                                slime.LikePoint = -10;
+                                slime.Status -= Random.Range(80, 100);
+                                slime.LikePoint -= -10;
                             }
                             else if (slime.attribute[j - 13] < -8)
-                            {
-                                slime.Status -= Random.Range(80, 90);
-                                slime.LikePoint -= Random.Range(8, 9);
-                            }
-                            else if (slime.attribute[j - 13] < -6)
                             {
                                 slime.Status -= Random.Range(60, 80);
                                 slime.LikePoint -= Random.Range(6, 8);
                             }
-                            else if (slime.attribute[j - 13] < -4)
+                            else if (slime.attribute[j - 13] < -6)
                             {
                                 slime.Status -= Random.Range(40, 60);
                                 slime.LikePoint -= Random.Range(4, 6);
                             }
-                            else if (slime.attribute[j - 13] < -2)
+                            else if (slime.attribute[j - 13] < -4)
                             {
                                 slime.Status -= Random.Range(20, 40);
                                 slime.LikePoint -= Random.Range(2, 4);
                             }
-                            else
+                            else if (slime.attribute[j - 13] < -2)
                             {
                                 slime.Status -= Random.Range(0, 20);
-                                slime.LikePoint -= 1;
+                                slime.LikePoint -= Random.Range(0, 2);
+                            }
+                            else
+                            {
+                                slime.Status -= Random.Range(0, 10);
+                                slime.LikePoint -= Random.Range(0, 2);
                             }
                         }
                         else
@@ -205,44 +210,37 @@ public class GameManager : MonoBehaviour
                             slime.Status += 0;
                         }
 
-                        for (int n = 13; n <= 19; n++)
-                        {
-                            if (j == n)
+                        int rand = Random.Range(0, 10);
+
+                        if (rand > 8)
+                            for (int n = 13; n <= 19; n++)
                             {
-                                if (itemData[i][4] != "")
+                                if (j == n)
                                 {
-                                    int r = int.Parse(itemData[i][4]);
-                                    int g = int.Parse(itemData[i][5]);
-                                    int b = int.Parse(itemData[i][6]);
-
-                                    int rand = Random.Range(0, 10);
-
-                                    if (rand > 8)
+                                    if (itemData[i][4] != "")
                                     {
+                                        int r = int.Parse(itemData[i][4]);
+                                        int g = int.Parse(itemData[i][5]);
+                                        int b = int.Parse(itemData[i][6]);
+
                                         Change_color(r, g, b);
                                         //Debug.Log(r + ":" + g + ":" + b);
                                     }
-                                }
-                                else if (itemData[i][7] != "")
-                                {
-                                    int r = int.Parse(itemData[i][7]);
-                                    int g = int.Parse(itemData[i][8]);
-                                    int b = int.Parse(itemData[i][9]);
-
-                                    int rand = Random.Range(0, 10);
-
-                                    if (rand > 8)
+                                    else if (itemData[i][7] != "")
                                     {
+                                        int r = int.Parse(itemData[i][7]);
+                                        int g = int.Parse(itemData[i][8]);
+                                        int b = int.Parse(itemData[i][9]);
+
                                         Change_color(r, g, b);
                                         //Debug.Log(r + ":" + g + ":" + b);
                                     }
-                                }
-                                else
-                                {
-                                    Change_color(255, 255, 255);
+                                    else
+                                    {
+                                        Change_color(255, 255, 255);
+                                    }
                                 }
                             }
-                        }
                     }
                 }
             }
@@ -260,15 +258,34 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator Change_face(float status, float likepoint)
     {
-        slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
+        if (slime.Status >= 75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.TRUST.ToString());
+        }
+        else if (slime.Status <= -75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.DISLIKE.ToString());
+        }
+        else
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
+        }
 
-        if (likepoint > 7 && status > 50)
+        if (likepoint == 10 && status == 100)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HOPE.ToString());
+        }
+        else if (likepoint > 7 && status > 50)
         {
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY_B.ToString());
         }
         else if (likepoint > 5)
         {
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY.ToString());
+        }
+        else if (likepoint == -10 && status == -100)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.FEAR.ToString());
         }
         else if (likepoint < -7 && status < -50)
         {
@@ -280,10 +297,26 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2);
-        slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
-
+        if (slime.Status >= 75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.TRUST.ToString());
+        }
+        else if (slime.Status <= -75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.DISLIKE.ToString());
+        }
+        else
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
+        }
     }
 
+    /// <summary>
+    ///  スライムの色を変える関数
+    /// </summary>
+    /// <param name="r">R値</param>
+    /// <param name="g">G値</param>
+    /// <param name="b">B値</param>
     void Change_color(int r, int g, int b)
     {
         slime_image.color = new Color(r, g, b);
@@ -293,17 +326,16 @@ public class GameManager : MonoBehaviour
 /// <summary>
 /// スライムの個体値管理クラス
 /// </summary>
-//[System.Serializable]
+// [System.Serializable]
 public class SlimeStatus
 {
-    [System.NonSerialized] private float likePoint;  //信頼↔嫌悪の基本となる感情 スライムの好みによって変動する変数
+    [System.NonSerialized] public int status; // 信頼↔嫌悪の基本となる感情の変数
+    [System.NonSerialized] public int likePoint;  // スライムの好みによって変動する変数
     [System.NonSerialized] public int attribute_num = 23;
     [System.NonSerialized]
-    public float[] attribute = new float[23];
-    [System.NonSerialized]
-    private float status;
+    public int[] attribute = new int[23];
 
-    public float Status
+    public int Status
     {
         get
         {
@@ -327,7 +359,7 @@ public class SlimeStatus
         }
     }
 
-    public float LikePoint
+    public int LikePoint
     {
         get
         {
@@ -350,7 +382,4 @@ public class SlimeStatus
             }
         }
     }
-    //public float red, blue, yellow, green, purple, white, black, bright, foods, fruits,
-    //           sweets, toys, hot, cool, hard, soft, curiosity, fancy, sober, round, anglar;
-
 }
