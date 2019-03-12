@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a360465538dd5947bf409da1094b7a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 0}
   image: {fileID: 1374799714687420}
   slimePos: {fileID: 0}
 --- !u!114 &114929561716980676

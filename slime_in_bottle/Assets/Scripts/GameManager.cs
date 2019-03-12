@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject flont_UI, back_UI;
     [SerializeField] GameObject parent;
     [SerializeField] GameObject bottle;
+    [SerializeField] GameObject frame;
     [SerializeField] GameObject item;
-    [SerializeField] GameObject child;
     [SerializeField] Image slime_image;
 
     int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
@@ -78,10 +78,10 @@ public class GameManager : MonoBehaviour
         {
             if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/Items/" + itemData[i][1]))
             {
-                GameObject clone = Instantiate(item, parent.transform);
-                GameObject image = Instantiate(child, clone.transform);
-                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Items/" + itemData[i][1].Replace(".png", ""));
-                EventTrigger eventTrigger = image.AddComponent<EventTrigger>();
+                GameObject clone = Instantiate(frame, parent.transform);
+                GameObject item_image = Instantiate(item, clone.transform);
+                item_image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Items/" + itemData[i][1].Replace(".png", ""));
+                EventTrigger eventTrigger = item_image.AddComponent<EventTrigger>();
                 EventTrigger.Entry entry = new EventTrigger.Entry();
                 entry.eventID = EventTriggerType.EndDrag;
                 int j = i;
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i <= item_num - 1; i++)
         {
             Transform clone = Instantiate(item, bottle.transform).transform;
-            Instantiate(child, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
+            Instantiate(frame, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
         }
 
         bottle.SetActive(false);

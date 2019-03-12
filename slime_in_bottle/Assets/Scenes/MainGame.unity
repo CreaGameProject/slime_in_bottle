@@ -679,8 +679,8 @@ MonoBehaviour:
   back_UI: {fileID: 1457987911}
   parent: {fileID: 881823167}
   bottle: {fileID: 995227137}
-  item: {fileID: 1374799714687420, guid: 2d96b2eecb263d94183b1bdec44fec7f, type: 2}
-  child: {fileID: 1025916296731174, guid: 49c71cac9df9d0c4dbf1c81386c3067b, type: 2}
+  frame: {fileID: 1374799714687420, guid: 2d96b2eecb263d94183b1bdec44fec7f, type: 2}
+  item: {fileID: 1025916296731174, guid: 49c71cac9df9d0c4dbf1c81386c3067b, type: 2}
   slime_image: {fileID: 1980063842}
 --- !u!4 &1309271137
 Transform:
@@ -1248,7 +1248,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2010838975}
   m_HandleRect: {fileID: 339208647}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
