@@ -4,19 +4,336 @@ using System.Text.RegularExpressions;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.U2D;
+
+enum Emotion
+{
+    DISLIKE, NOMAL, TRUST, HAPPY, SAD, ANGRY, HAPPY_B, SURPRISE, TIRED, HOPE, FEAR
+}
+
+enum Form
+{
+    NOMAL, CUBE, SHARPLY, LIQUID, LIMP, ANGLAR
+}
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject flont_UI, back_UI;
-    [SerializeField] GameObject item;
     [SerializeField] GameObject parent;
+    [SerializeField] GameObject bottle;
+    [SerializeField] GameObject item;
     [SerializeField] GameObject child;
-    int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
-    const int item_num = 15; //アイテム数
-    List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
+    [SerializeField] Image slime_image;
 
-    int status; //信頼↔嫌悪の基本となる感情
-    int likePoint; //スライムの好みによって変動する変数
+    int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
+    const int item_num = 15; //セーブデータ数
+    List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
+    SlimeStatus slime = new SlimeStatus(); //インスタンス作成
+
+    void Start()
+    {
+        ReadFile();
+
+        slime.Status = 0;
+        slime.LikePoint = 0;
+
+        SlimeStatus();
+    }
+
+    void Update()
+    {
+
+    }
+
+    /// <summary>
+    /// スライムのステータスを決定する関数
+    /// </summary>
+    void SlimeStatus()
+    {
+        for (int i = 0; i < slime.attribute_num; i++)
+        {
+            slime.attribute[i] = Random.Range(-10, 10);
+            Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
+        }
+    }
+
+    /// <summary>
+    /// CSVファイルからアイテム画像を読み込み、アイテムリストをインスタンシエイトする関数
+    /// </summary>
+    void ReadFile()
+    {
+        TextAsset itemList = Resources.Load("itemList") as TextAsset;
+        StringReader reader = new StringReader(itemList.text);
+        //List<GameObject> items = new List<GameObject>();
+
+        while (reader.Peek() != -1)
+        {
+            string line = reader.ReadLine();
+            itemData.Add(line.Split(','));
+        }
+
+        for (int i = 0; i < 271; i++)
+        {
+            if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/Items/" + itemData[i][1]))
+            {
+                GameObject clone = Instantiate(item, parent.transform);
+                GameObject image = Instantiate(child, clone.transform);
+                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Items/" + itemData[i][1].Replace(".png", ""));
+                EventTrigger eventTrigger = image.AddComponent<EventTrigger>();
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.EndDrag;
+                int j = i;
+                entry.callback.AddListener((x) => Give_item(itemData[j][1].Replace(".png", "")));
+                eventTrigger.triggers.Add(entry);
+            }
+        }
+
+        for (int i = 0; i <= item_num - 1; i++)
+        {
+            Transform clone = Instantiate(item, bottle.transform).transform;
+            Instantiate(child, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
+        }
+
+        bottle.SetActive(false);
+    }
+
+    /// <summary>
+    /// UIの切り替えを行う関数
+    /// </summary>
+    public void Change_UI()
+    {
+        Color flont_c = flont_UI.GetComponent<Image>().color;
+        Color back_c = back_UI.GetComponent<Image>().color;
+
+        flont_UI.GetComponent<Image>().color = back_c;
+        back_UI.GetComponent<Image>().color = flont_c;
+
+        UI_flag = 1 - UI_flag;
+
+        if (UI_flag == 0)
+        {
+            parent.SetActive(true);
+            bottle.SetActive(false);
+        }
+        else
+        {
+            parent.SetActive(false);
+            bottle.SetActive(true);
+        }
+    }
+
+    /// <summary>
+    /// アイテムを与えたときのスライムの値の変動を行う関数
+    /// </summary>
+    /// <param name="itemName">アイテムの名前</param>
+    public void Give_item(string itemName)
+    {
+        for (int i = 0; i < 271; i++)
+        {
+            if (itemName == itemData[i][1].Replace(".png", ""))
+            {
+                for (int j = 13; j <= 35; j++)
+                {
+                    if (itemData[i][j] == "〇")
+                    {
+                        // Debug.Log(itemData[1][j]);
+                        if (slime.attribute[j - 13] > 0)
+                        {
+                            if (slime.attribute[j - 13] == 10)
+                            {
+                                slime.Status += 100;
+                                slime.LikePoint += 10;
+                            }
+                            else if (slime.attribute[j - 13] > 8)
+                            {
+                                slime.Status += Random.Range(80, 100);
+                                slime.LikePoint += Random.Range(8, 10);
+                            }
+                            else if (slime.attribute[j - 13] > 6)
+                            {
+                                slime.Status += Random.Range(60, 80);
+                                slime.LikePoint += Random.Range(6, 8);
+
+                            }
+                            else if (slime.attribute[j - 13] > 4)
+                            {
+                                slime.Status += Random.Range(40, 60);
+                                slime.LikePoint += Random.Range(4, 6);
+                            }
+                            else if (slime.attribute[j - 13] > 2)
+                            {
+                                slime.Status += Random.Range(20, 40);
+                                slime.LikePoint += Random.Range(2, 4);
+                            }
+                            else
+                            {
+                                slime.Status += Random.Range(0, 20);
+                                slime.LikePoint += Random.Range(0, 2);
+                            }
+                        }
+                        else if (slime.attribute[j - 13] < 0)
+                        {
+                            if (slime.attribute[j - 13] == -10)
+                            {
+                                slime.Status -= Random.Range(80, 100);
+                                slime.LikePoint -= -10;
+                            }
+                            else if (slime.attribute[j - 13] < -8)
+                            {
+                                slime.Status -= Random.Range(60, 80);
+                                slime.LikePoint -= Random.Range(6, 8);
+                            }
+                            else if (slime.attribute[j - 13] < -6)
+                            {
+                                slime.Status -= Random.Range(40, 60);
+                                slime.LikePoint -= Random.Range(4, 6);
+                            }
+                            else if (slime.attribute[j - 13] < -4)
+                            {
+                                slime.Status -= Random.Range(20, 40);
+                                slime.LikePoint -= Random.Range(2, 4);
+                            }
+                            else if (slime.attribute[j - 13] < -2)
+                            {
+                                slime.Status -= Random.Range(0, 20);
+                                slime.LikePoint -= Random.Range(0, 2);
+                            }
+                            else
+                            {
+                                slime.Status -= Random.Range(0, 10);
+                                slime.LikePoint -= Random.Range(0, 2);
+                            }
+                        }
+                        else
+                        {
+                            slime.Status += 0;
+                        }
+
+                        int rand = Random.Range(0, 10);
+
+                        if (rand > 8)
+                            for (int n = 13; n <= 19; n++)
+                            {
+                                if (j == n)
+                                {
+                                    if (itemData[i][4] != "")
+                                    {
+                                        int r = int.Parse(itemData[i][4]);
+                                        int g = int.Parse(itemData[i][5]);
+                                        int b = int.Parse(itemData[i][6]);
+
+                                        Change_color(r, g, b);
+                                        //Debug.Log(r + ":" + g + ":" + b);
+                                    }
+                                    else if (itemData[i][7] != "")
+                                    {
+                                        int r = int.Parse(itemData[i][7]);
+                                        int g = int.Parse(itemData[i][8]);
+                                        int b = int.Parse(itemData[i][9]);
+
+                                        Change_color(r, g, b);
+                                        //Debug.Log(r + ":" + g + ":" + b);
+                                    }
+                                    else
+                                    {
+                                        Change_color(255, 255, 255);
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
+        }
+        Debug.Log(slime.Status + ":" + slime.LikePoint);
+
+        StartCoroutine(Change_face(slime.Status, slime.LikePoint));
+    }
+
+    /// <summary>
+    /// スライムの表情を変える関数
+    /// </summary>
+    /// <param name="status">信頼↔嫌悪の基本となる変数</param>
+    /// <param name="likepoint">スライムの好みによって変動する変数</param>
+    /// <returns></returns>
+    IEnumerator Change_face(float status, float likepoint)
+    {
+        if (slime.Status >= 75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.TRUST.ToString());
+        }
+        else if (slime.Status <= -75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.DISLIKE.ToString());
+        }
+        else
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
+        }
+
+        if (likepoint == 10 && status == 100)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HOPE.ToString());
+        }
+        else if (likepoint > 7 && status > 50)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY_B.ToString());
+        }
+        else if (likepoint > 5)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.HAPPY.ToString());
+        }
+        else if (likepoint == -10 && status == -100)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.FEAR.ToString());
+        }
+        else if (likepoint < -7 && status < -50)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.ANGRY.ToString());
+        }
+        else if (likepoint < -5)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.SAD.ToString());
+        }
+
+        yield return new WaitForSeconds(2);
+        if (slime.Status >= 75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.TRUST.ToString());
+        }
+        else if (slime.Status <= -75)
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.DISLIKE.ToString());
+        }
+        else
+        {
+            slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
+        }
+    }
+
+    /// <summary>
+    ///  スライムの色を変える関数
+    /// </summary>
+    /// <param name="r">R値</param>
+    /// <param name="g">G値</param>
+    /// <param name="b">B値</param>
+    void Change_color(int r, int g, int b)
+    {
+        slime_image.color = new Color(r, g, b);
+    }
+}
+
+/// <summary>
+/// スライムの個体値管理クラス
+/// </summary>
+// [System.Serializable]
+public class SlimeStatus
+{
+    [System.NonSerialized] public int status; // 信頼↔嫌悪の基本となる感情の変数
+    [System.NonSerialized] public int likePoint;  // スライムの好みによって変動する変数
+    [System.NonSerialized] public int attribute_num = 23;
+    [System.NonSerialized]
+    public int[] attribute = new int[23];
 
     public int Status
     {
@@ -65,108 +382,4 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    void Start()
-    {
-        ReadFile();
-        Status = 0;
-        LikePoint = 0;
-    }
-
-    void Update()
-    {
-
-    }
-
-    /// <summary>
-    /// CSVファイルからアイテム画像を読み込む関数
-    /// </summary>
-    void ReadFile()
-    {
-        TextAsset itemList = Resources.Load("itemList") as TextAsset;
-        StringReader reader = new StringReader(itemList.text);
-
-        while (reader.Peek() != -1)
-        {
-            string line = reader.ReadLine();
-            itemData.Add(line.Split(','));
-        }
-
-        int j = 0;
-
-        for (int i = 0; i <= 359; i++)
-        {
-            if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
-            {
-                Transform clone = Instantiate(item, parent.transform).transform;
-                Instantiate(child, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
-                j++;
-            }
-        }
-    }
-
-    /// <summary>
-    /// UIの切り替えを行う関数
-    /// </summary>
-    public void Change_UI()
-    {
-        Color flont_c = flont_UI.GetComponent<Image>().color;
-        Color back_c = back_UI.GetComponent<Image>().color;
-
-        flont_UI.GetComponent<Image>().color = back_c;
-        back_UI.GetComponent<Image>().color = flont_c;
-
-        UI_flag = 1 - UI_flag;
-
-        if (UI_flag == 0)
-        {
-            int j = 0;
-
-            for (int i = 0; i <= 359; i++)
-            {
-                string fileName = itemData[i][1].Replace(".png", "");
-
-                if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/" + itemData[i][1]) && j < 15)
-                {
-                    //list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + itemData[i][1].Replace(".png", ""));
-                    j++;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i <= item_num - 1; i++)
-            {
-               // list.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
-            }
-        }
-    }
-}
-
-/// <summary>
-/// スライムの個体値管理クラス
-/// </summary>
-public class SlimeStatus
-{
-    public int red;
-    public int blue;
-    public int yellow;
-    public int green;
-    public int purple;
-    public int white;
-    public int black;
-    public int bright;
-    public int foods;
-    public int fruits;
-    public int sweets;
-    public int toys;
-    public int hot;
-    public int cool;
-    public int hard;
-    public int soft;
-    public int curiosity;
-    public int fancy;
-    public int sober;
-    public int round;
-    public int anglar;
 }
