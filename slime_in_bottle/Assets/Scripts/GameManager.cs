@@ -37,7 +37,8 @@ public class GameManager : MonoBehaviour
 
         slime.Status = 0;
         slime.LikePoint = 0;
-
+        slime.slime_color = slime_image.color;
+        Debug.Log(slime.slime_color);
         SlimeStatus();
     }
 
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < slime.attribute_num; i++)
         {
             slime.attribute[i] = Random.Range(-10, 10);
-            Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
+            // Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
         }
     }
 
@@ -212,7 +213,8 @@ public class GameManager : MonoBehaviour
 
                         int rand = Random.Range(0, 10);
 
-                        if (rand > 8)
+                        //if (rand > 8)
+                        //{
                             for (int n = 13; n <= 19; n++)
                             {
                                 if (j == n)
@@ -241,11 +243,12 @@ public class GameManager : MonoBehaviour
                                     }
                                 }
                             }
+                        //}
                     }
                 }
             }
         }
-        Debug.Log(slime.Status + ":" + slime.LikePoint);
+        // Debug.Log(slime.Status + ":" + slime.LikePoint);
 
         StartCoroutine(Change_face(slime.Status, slime.LikePoint));
     }
@@ -320,6 +323,7 @@ public class GameManager : MonoBehaviour
     void Change_color(int r, int g, int b)
     {
         slime_image.color = new Color(r, g, b);
+        Debug.Log(slime_image.color);
     }
 }
 
@@ -332,6 +336,7 @@ public class SlimeStatus
     [System.NonSerialized] public int status; // 信頼↔嫌悪の基本となる感情の変数
     [System.NonSerialized] public int likePoint;  // スライムの好みによって変動する変数
     [System.NonSerialized] public int attribute_num = 23;
+    [System.NonSerialized] public Color slime_color;
     [System.NonSerialized]
     public int[] attribute = new int[23];
 
