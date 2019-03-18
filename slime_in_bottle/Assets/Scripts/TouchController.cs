@@ -9,12 +9,11 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     Vector2 prevPos, dragPos, endPos;
     [SerializeField] Transform parent;
     [SerializeField] GameObject image;
-    [SerializeField] GameObject slimePos;
-    [System.NonSerialized] public int eat_flag;
+    [SerializeField] Vector2 slimePos;
 
     void Start()
     {
-        eat_flag = 0;
+
     }
 
     void Update()
@@ -29,20 +28,17 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-
-        dragPos = eventData.position;
-        transform.position = dragPos;
-        //transform.SetParent(parent);
-        //transform.SetAsLastSibling();
+        transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         endPos = transform.position;
         transform.position = prevPos;
-        if (Vector2.Distance(endPos, slimePos.transform.position) > 1200)
+        Debug.Log(Vector2.Distance(endPos, slimePos));
+        if (Vector2.Distance(endPos, slimePos) < 1200 && Vector2.Distance(endPos, slimePos) > 850)
         {
-            //Debug.Log("ate!");
+            Debug.Log("ate!");
         }
     }
 }

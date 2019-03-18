@@ -12,22 +12,15 @@ enum Emotion
     DISLIKE, NOMAL, TRUST, HAPPY, SAD, ANGRY, HAPPY_B, SURPRISE, TIRED, HOPE, FEAR
 }
 
-enum Form
-{
-    NOMAL, CUBE, SHARPLY, LIQUID, LIMP, ANGLAR
-}
+//enum Form
+//{
+//    NOMAL, CUBE, SHARPLY, LIQUID, LIMP, ANGLAR
+//}
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject flont_UI, back_UI;
-    [SerializeField] GameObject parent;
-    [SerializeField] GameObject bottle;
-    [SerializeField] GameObject frame;
-    [SerializeField] GameObject item;
+    [SerializeField] GameObject parent, frame, item;
     [SerializeField] Image slime_image;
-
-    int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
-    const int item_num = 15; //セーブデータ数
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
     SlimeStatus slime = new SlimeStatus(); //インスタンス作成
 
@@ -38,8 +31,8 @@ public class GameManager : MonoBehaviour
         slime.Status = 0;
         slime.LikePoint = 0;
         slime.slime_color = slime_image.color;
+        SlimeAttribute();
         Debug.Log(slime.slime_color);
-        SlimeStatus();
     }
 
     void Update()
@@ -50,7 +43,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// スライムのステータスを決定する関数
     /// </summary>
-    void SlimeStatus()
+    void SlimeAttribute()
     {
         for (int i = 0; i < slime.attribute_num; i++)
         {
@@ -60,13 +53,12 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// CSVファイルからアイテム画像を読み込み、アイテムリストをインスタンシエイトする関数
+    /// CSVファイルからアイテム画像を読み込み、アイテムリストを生成する関数
     /// </summary>
     void ReadFile()
     {
         TextAsset itemList = Resources.Load("itemList") as TextAsset;
         StringReader reader = new StringReader(itemList.text);
-        //List<GameObject> items = new List<GameObject>();
 
         while (reader.Peek() != -1)
         {
@@ -89,41 +81,8 @@ public class GameManager : MonoBehaviour
                 eventTrigger.triggers.Add(entry);
             }
         }
-
-        for (int i = 0; i <= item_num - 1; i++)
-        {
-            Transform clone = Instantiate(item, bottle.transform).transform;
-            Instantiate(frame, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
-        }
-
-        bottle.SetActive(false);
     }
-
-    /// <summary>
-    /// UIの切り替えを行う関数
-    /// </summary>
-    public void Change_UI()
-    {
-        Color flont_c = flont_UI.GetComponent<Image>().color;
-        Color back_c = back_UI.GetComponent<Image>().color;
-
-        flont_UI.GetComponent<Image>().color = back_c;
-        back_UI.GetComponent<Image>().color = flont_c;
-
-        UI_flag = 1 - UI_flag;
-
-        if (UI_flag == 0)
-        {
-            parent.SetActive(true);
-            bottle.SetActive(false);
-        }
-        else
-        {
-            parent.SetActive(false);
-            bottle.SetActive(true);
-        }
-    }
-
+    
     /// <summary>
     /// アイテムを与えたときのスライムの値の変動を行う関数
     /// </summary>
@@ -215,34 +174,34 @@ public class GameManager : MonoBehaviour
 
                         //if (rand > 8)
                         //{
-                            for (int n = 13; n <= 19; n++)
+                        for (int n = 13; n <= 19; n++)
+                        {
+                            if (j == n)
                             {
-                                if (j == n)
+                                if (itemData[i][4] != "")
                                 {
-                                    if (itemData[i][4] != "")
-                                    {
-                                        int r = int.Parse(itemData[i][4]);
-                                        int g = int.Parse(itemData[i][5]);
-                                        int b = int.Parse(itemData[i][6]);
+                                    int r = int.Parse(itemData[i][4]);
+                                    int g = int.Parse(itemData[i][5]);
+                                    int b = int.Parse(itemData[i][6]);
 
-                                        Change_color(r, g, b);
-                                        //Debug.Log(r + ":" + g + ":" + b);
-                                    }
-                                    else if (itemData[i][7] != "")
-                                    {
-                                        int r = int.Parse(itemData[i][7]);
-                                        int g = int.Parse(itemData[i][8]);
-                                        int b = int.Parse(itemData[i][9]);
+                                    Change_color(r, g, b);
+                                    //Debug.Log(r + ":" + g + ":" + b);
+                                }
+                                else if (itemData[i][7] != "")
+                                {
+                                    int r = int.Parse(itemData[i][7]);
+                                    int g = int.Parse(itemData[i][8]);
+                                    int b = int.Parse(itemData[i][9]);
 
-                                        Change_color(r, g, b);
-                                        //Debug.Log(r + ":" + g + ":" + b);
-                                    }
-                                    else
-                                    {
-                                        Change_color(255, 255, 255);
-                                    }
+                                    Change_color(r, g, b);
+                                    //Debug.Log(r + ":" + g + ":" + b);
+                                }
+                                else
+                                {
+                                    Change_color(255, 255, 255);
                                 }
                             }
+                        }
                         //}
                     }
                 }
