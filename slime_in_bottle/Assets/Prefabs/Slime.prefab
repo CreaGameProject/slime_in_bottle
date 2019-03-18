@@ -9,18 +9,18 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1380075193810242}
+  m_RootGameObject: {fileID: 1735177840230362}
   m_IsPrefabAsset: 1
---- !u!1 &1380075193810242
+--- !u!1 &1735177840230362
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 224084133449894508}
-  - component: {fileID: 222356095948433548}
-  - component: {fileID: 114629581238793240}
+  - component: {fileID: 224656971154328220}
+  - component: {fileID: 222687973812570716}
+  - component: {fileID: 114022000742454302}
   m_Layer: 5
   m_Name: Slime
   m_TagString: Untagged
@@ -28,12 +28,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114629581238793240
+--- !u!114 &114022000742454302
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1380075193810242}
+  m_GameObject: {fileID: 1735177840230362}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -55,19 +55,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!222 &222356095948433548
+--- !u!222 &222687973812570716
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1380075193810242}
+  m_GameObject: {fileID: 1735177840230362}
   m_CullTransparentMesh: 0
---- !u!224 &224084133449894508
+--- !u!224 &224656971154328220
 RectTransform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1380075193810242}
+  m_GameObject: {fileID: 1735177840230362}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}

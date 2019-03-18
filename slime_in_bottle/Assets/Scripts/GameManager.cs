@@ -12,22 +12,15 @@ enum Emotion
     DISLIKE, NOMAL, TRUST, HAPPY, SAD, ANGRY, HAPPY_B, SURPRISE, TIRED, HOPE, FEAR
 }
 
-enum Form
-{
-    NOMAL, CUBE, SHARPLY, LIQUID, LIMP, ANGLAR
-}
+//enum Form
+//{
+//    NOMAL, CUBE, SHARPLY, LIQUID, LIMP, ANGLAR
+//}
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject flont_UI, back_UI;
-    [SerializeField] GameObject parent;
-    [SerializeField] GameObject bottle;
-    [SerializeField] GameObject item;
-    [SerializeField] GameObject child;
+    [SerializeField] GameObject parent, frame, item;
     [SerializeField] Image slime_image;
-
-    int UI_flag = 0; //アイテム画面(0)と棚画面(1)切り替えのフラグ
-    const int item_num = 15; //セーブデータ数
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
     SlimeStatus slime = new SlimeStatus(); //インスタンス作成
 
@@ -37,8 +30,9 @@ public class GameManager : MonoBehaviour
 
         slime.Status = 0;
         slime.LikePoint = 0;
-
-        SlimeStatus();
+        slime.slime_color = slime_image.color;
+        SlimeAttribute();
+        Debug.Log(slime.slime_color);
     }
 
     void Update()
@@ -49,23 +43,22 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// スライムのステータスを決定する関数
     /// </summary>
-    void SlimeStatus()
+    void SlimeAttribute()
     {
         for (int i = 0; i < slime.attribute_num; i++)
         {
             slime.attribute[i] = Random.Range(-10, 10);
-            Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
+            // Debug.Log(itemData[1][i + 13] + ":" + slime.attribute[i]);
         }
     }
 
     /// <summary>
-    /// CSVファイルからアイテム画像を読み込み、アイテムリストをインスタンシエイトする関数
+    /// CSVファイルからアイテム画像を読み込み、アイテムリストを生成する関数
     /// </summary>
     void ReadFile()
     {
         TextAsset itemList = Resources.Load("itemList") as TextAsset;
         StringReader reader = new StringReader(itemList.text);
-        //List<GameObject> items = new List<GameObject>();
 
         while (reader.Peek() != -1)
         {
@@ -77,10 +70,10 @@ public class GameManager : MonoBehaviour
         {
             if (itemData[i][3] == "1" && File.Exists("Assets/Resources/Sprites/Items/" + itemData[i][1]))
             {
-                GameObject clone = Instantiate(item, parent.transform);
-                GameObject image = Instantiate(child, clone.transform);
-                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Items/" + itemData[i][1].Replace(".png", ""));
-                EventTrigger eventTrigger = image.AddComponent<EventTrigger>();
+                GameObject clone = Instantiate(frame, parent.transform);
+                GameObject item_image = Instantiate(item, clone.transform);
+                item_image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Items/" + itemData[i][1].Replace(".png", ""));
+                EventTrigger eventTrigger = item_image.AddComponent<EventTrigger>();
                 EventTrigger.Entry entry = new EventTrigger.Entry();
                 entry.eventID = EventTriggerType.EndDrag;
                 int j = i;
@@ -88,41 +81,8 @@ public class GameManager : MonoBehaviour
                 eventTrigger.triggers.Add(entry);
             }
         }
-
-        for (int i = 0; i <= item_num - 1; i++)
-        {
-            Transform clone = Instantiate(item, bottle.transform).transform;
-            Instantiate(child, clone).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bottle");
-        }
-
-        bottle.SetActive(false);
     }
-
-    /// <summary>
-    /// UIの切り替えを行う関数
-    /// </summary>
-    public void Change_UI()
-    {
-        Color flont_c = flont_UI.GetComponent<Image>().color;
-        Color back_c = back_UI.GetComponent<Image>().color;
-
-        flont_UI.GetComponent<Image>().color = back_c;
-        back_UI.GetComponent<Image>().color = flont_c;
-
-        UI_flag = 1 - UI_flag;
-
-        if (UI_flag == 0)
-        {
-            parent.SetActive(true);
-            bottle.SetActive(false);
-        }
-        else
-        {
-            parent.SetActive(false);
-            bottle.SetActive(true);
-        }
-    }
-
+    
     /// <summary>
     /// アイテムを与えたときのスライムの値の変動を行う関数
     /// </summary>
@@ -212,40 +172,42 @@ public class GameManager : MonoBehaviour
 
                         int rand = Random.Range(0, 10);
 
-                        if (rand > 8)
-                            for (int n = 13; n <= 19; n++)
+                        //if (rand > 8)
+                        //{
+                        for (int n = 13; n <= 19; n++)
+                        {
+                            if (j == n)
                             {
-                                if (j == n)
+                                if (itemData[i][4] != "")
                                 {
-                                    if (itemData[i][4] != "")
-                                    {
-                                        int r = int.Parse(itemData[i][4]);
-                                        int g = int.Parse(itemData[i][5]);
-                                        int b = int.Parse(itemData[i][6]);
+                                    int r = int.Parse(itemData[i][4]);
+                                    int g = int.Parse(itemData[i][5]);
+                                    int b = int.Parse(itemData[i][6]);
 
-                                        Change_color(r, g, b);
-                                        //Debug.Log(r + ":" + g + ":" + b);
-                                    }
-                                    else if (itemData[i][7] != "")
-                                    {
-                                        int r = int.Parse(itemData[i][7]);
-                                        int g = int.Parse(itemData[i][8]);
-                                        int b = int.Parse(itemData[i][9]);
+                                    Change_color(r, g, b);
+                                    //Debug.Log(r + ":" + g + ":" + b);
+                                }
+                                else if (itemData[i][7] != "")
+                                {
+                                    int r = int.Parse(itemData[i][7]);
+                                    int g = int.Parse(itemData[i][8]);
+                                    int b = int.Parse(itemData[i][9]);
 
-                                        Change_color(r, g, b);
-                                        //Debug.Log(r + ":" + g + ":" + b);
-                                    }
-                                    else
-                                    {
-                                        Change_color(255, 255, 255);
-                                    }
+                                    Change_color(r, g, b);
+                                    //Debug.Log(r + ":" + g + ":" + b);
+                                }
+                                else
+                                {
+                                    Change_color(255, 255, 255);
                                 }
                             }
+                        }
+                        //}
                     }
                 }
             }
         }
-        Debug.Log(slime.Status + ":" + slime.LikePoint);
+        // Debug.Log(slime.Status + ":" + slime.LikePoint);
 
         StartCoroutine(Change_face(slime.Status, slime.LikePoint));
     }
@@ -320,6 +282,7 @@ public class GameManager : MonoBehaviour
     void Change_color(int r, int g, int b)
     {
         slime_image.color = new Color(r, g, b);
+        Debug.Log(slime_image.color);
     }
 }
 
@@ -332,6 +295,7 @@ public class SlimeStatus
     [System.NonSerialized] public int status; // 信頼↔嫌悪の基本となる感情の変数
     [System.NonSerialized] public int likePoint;  // スライムの好みによって変動する変数
     [System.NonSerialized] public int attribute_num = 23;
+    [System.NonSerialized] public Color slime_color;
     [System.NonSerialized]
     public int[] attribute = new int[23];
 
