@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// CSVファイルからアイテム画像を読み込み、アイテムリストを生成する関数
     /// </summary>
+    #region
     void ReadFile()
     {
         TextAsset itemList = Resources.Load("itemList") as TextAsset;
@@ -82,11 +83,13 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
+    #endregion
+
     /// <summary>
     /// アイテムを与えたときのスライムの値の変動を行う関数
     /// </summary>
     /// <param name="itemName">アイテムの名前</param>
+    #region
     public void Give_item(string itemName)
     {
         for (int i = 0; i < 271; i++)
@@ -211,6 +214,7 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(Change_face(slime.Status, slime.LikePoint));
     }
+    #endregion
 
     /// <summary>
     /// スライムの表情を変える関数
@@ -218,6 +222,7 @@ public class GameManager : MonoBehaviour
     /// <param name="status">信頼↔嫌悪の基本となる変数</param>
     /// <param name="likepoint">スライムの好みによって変動する変数</param>
     /// <returns></returns>
+    #region
     IEnumerator Change_face(float status, float likepoint)
     {
         if (slime.Status >= 75)
@@ -272,6 +277,7 @@ public class GameManager : MonoBehaviour
             slime_image.sprite = Resources.Load<Sprite>("Sprites/Slime/" + Emotion.NOMAL.ToString());
         }
     }
+    #endregion
 
     /// <summary>
     ///  スライムの色を変える関数
