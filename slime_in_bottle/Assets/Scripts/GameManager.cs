@@ -19,10 +19,13 @@ enum Emotion
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject parent, frame, item;
+    [SerializeField] GameObject parent, frame, item, makeName, back, done;
+    [SerializeField] Text name, new_name;
+    [SerializeField] InputField input_name;
     [SerializeField] Image slime_image;
     List<string[]> itemData = new List<string[]>(); //CSVファイルのデータを格納するリスト
     SlimeStatus slime = new SlimeStatus(); //インスタンス作成
+    int flag;
 
     void Start()
     {
@@ -30,6 +33,8 @@ public class GameManager : MonoBehaviour
 
         slime.Status = 0;
         slime.LikePoint = 0;
+        flag = 0;
+        name.text = slime.name;
         slime.slime_color = slime_image.color;
         SlimeAttribute();
         Debug.Log(slime.slime_color);
@@ -175,37 +180,37 @@ public class GameManager : MonoBehaviour
 
                         int rand = Random.Range(0, 10);
 
-                        //if (rand > 8)
-                        //{
-                        for (int n = 13; n <= 19; n++)
+                        if (rand > 8)
                         {
-                            if (j == n)
+                            for (int n = 13; n <= 19; n++)
                             {
-                                if (itemData[i][4] != "")
+                                if (j == n)
                                 {
-                                    int r = int.Parse(itemData[i][4]);
-                                    int g = int.Parse(itemData[i][5]);
-                                    int b = int.Parse(itemData[i][6]);
+                                    if (itemData[i][4] != "")
+                                    {
+                                        int r = int.Parse(itemData[i][4]);
+                                        int g = int.Parse(itemData[i][5]);
+                                        int b = int.Parse(itemData[i][6]);
 
-                                    Change_color(r, g, b);
-                                    //Debug.Log(r + ":" + g + ":" + b);
-                                }
-                                else if (itemData[i][7] != "")
-                                {
-                                    int r = int.Parse(itemData[i][7]);
-                                    int g = int.Parse(itemData[i][8]);
-                                    int b = int.Parse(itemData[i][9]);
+                                        Change_color(r, g, b);
+                                        //Debug.Log(r + ":" + g + ":" + b);
+                                    }
+                                    else if (itemData[i][7] != "")
+                                    {
+                                        int r = int.Parse(itemData[i][7]);
+                                        int g = int.Parse(itemData[i][8]);
+                                        int b = int.Parse(itemData[i][9]);
 
-                                    Change_color(r, g, b);
-                                    //Debug.Log(r + ":" + g + ":" + b);
-                                }
-                                else
-                                {
-                                    Change_color(255, 255, 255);
+                                        Change_color(r, g, b);
+                                        //Debug.Log(r + ":" + g + ":" + b);
+                                    }
+                                    else
+                                    {
+                                        Change_color(255, 255, 255);
+                                    }
                                 }
                             }
                         }
-                        //}
                     }
                 }
             }
@@ -290,6 +295,28 @@ public class GameManager : MonoBehaviour
         slime_image.color = new Color(r, g, b);
         Debug.Log(slime_image.color);
     }
+
+    public void Slime_name_UI()
+    {
+        flag = 1 - flag;
+
+        if (flag == 1)
+        {
+            makeName.SetActive(true);
+        }
+        else
+        {
+            input_name.text = "";
+            makeName.SetActive(false);
+        }
+    }
+
+    public void Change_slime_name()
+    {
+        slime.name = new_name.text;
+        name.text = new_name.text;
+        input_name.text = "";
+    }
 }
 
 /// <summary>
@@ -298,6 +325,7 @@ public class GameManager : MonoBehaviour
 // [System.Serializable]
 public class SlimeStatus
 {
+    [System.NonSerialized] public string name = "すらいむ"; // スライムの名前
     [System.NonSerialized] public int status; // 信頼↔嫌悪の基本となる感情の変数
     [System.NonSerialized] public int likePoint;  // スライムの好みによって変動する変数
     [System.NonSerialized] public int attribute_num = 23;
