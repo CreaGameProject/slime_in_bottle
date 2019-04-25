@@ -6,6 +6,7 @@ TagManager:
   tags:
   - itemList
   - shelf
+  - Slime
   layers:
   - Default
   - TransparentFX

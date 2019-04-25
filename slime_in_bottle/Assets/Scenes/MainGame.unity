@@ -1112,6 +1112,7 @@ MonoBehaviour:
   new_name: {fileID: 404421917}
   input_name: {fileID: 986167797}
   slime_image: {fileID: 1980063842}
+  const_num: 5
 --- !u!4 &1309271137
 Transform:
   m_ObjectHideFlags: 0
@@ -1503,7 +1504,7 @@ GameObject:
   - component: {fileID: 1980063842}
   m_Layer: 5
   m_Name: Slime
-  m_TagString: Untagged
+  m_TagString: Slime
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -6,10 +6,9 @@ using UnityEngine.EventSystems;
 
 public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    Vector2 prevPos, dragPos, endPos;
-    [SerializeField] Transform parent;
+    Vector2 prevPos, endPos;
     [SerializeField] GameObject image;
-    [SerializeField] Vector2 slimePos;
+    public static int flag = 0; // スライムのステータスを変動させるかどうかのフラグ
 
     void Start()
     {
@@ -35,10 +34,17 @@ public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         endPos = transform.position;
         transform.position = prevPos;
-        Debug.Log(Vector2.Distance(endPos, slimePos));
-        if (Vector2.Distance(endPos, slimePos) < 1200 && Vector2.Distance(endPos, slimePos) > 850)
+
+        var raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raycastResults);
+
+        foreach (var hit in raycastResults)
         {
-            Debug.Log("ate!");
+            // スライムの上でアイテムが離されたらフラグを1に
+            if (hit.gameObject.CompareTag("Slime"))
+            {
+                flag = 1;
+            }
         }
     }
 }
