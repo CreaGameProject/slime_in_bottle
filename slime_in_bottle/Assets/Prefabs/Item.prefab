@@ -40,9 +40,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a360465538dd5947bf409da1094b7a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 224690643339567576, guid: 2d96b2eecb263d94183b1bdec44fec7f, type: 2}
+  parent: {fileID: 0}
+  frame: {fileID: 0}
+  item: {fileID: 0}
+  makeName: {fileID: 0}
+  back: {fileID: 0}
+  done: {fileID: 0}
+  name: {fileID: 0}
+  new_name: {fileID: 0}
+  input_name: {fileID: 0}
+  slime_image: {fileID: 0}
   image: {fileID: 1025916296731174}
-  slimePos: {fileID: 0}
+  slimePos: {x: 0, y: 0}
 --- !u!114 &114680014571871702
 MonoBehaviour:
   m_ObjectHideFlags: 1
